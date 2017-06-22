@@ -1,0 +1,31 @@
+#-*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
+import re
+
+train = []    
+with open ('F:/DataMining/dsjtzs/dsjtzs_txfz_training_sample.txt','r') as fh:
+    data = fh.readlines()
+    for line in data:
+        record = line.split()
+        train.append(record)
+trajectorys0 = train[0][1]
+
+coordinates0 = re.split(';|,',trajectorys0)
+
+time_list = []
+for i in range(len(coordinates0)):
+    if i % 3 == 2: 
+        t = int(coordinates0[i])
+        time_list.append(t)
+time_arr = np.array(time_list)
+
+#timespan_perrecord = int(time_arr[len(time_arr)-1]) - int(time_arr[0])
+timespan_perrecord = time_arr[len(time_arr)-1] - time_arr[0]
+timrspan_adjacentcooordinate = []
+for i in range(len(time_arr)-1):
+    delta_t = time_arr[i+1] - time_arr[i]  
+    timrspan_adjacentcooordinate.append(delta_t)
+meantimespan = np.array(timrspan_adjacentcooordinate)
+meantimespan = round(meantimespan.mean(),2)
+print meantimespan,timespan_perrecord
